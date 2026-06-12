@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDAF - Comunicado de Atualização de Rebanho</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+    --verde:#1b5e20;
+    --verde2:#2e7d32;
+    --verde3:#e8f5e9;
+    --borda:#c8d6c8;
+    --texto:#1f2933;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(135deg,#eef6ee,#f8faf8);
+    color:var(--texto);
+}
+.topo-sistema{
+    background:linear-gradient(90deg,var(--verde),var(--verde2));
+    color:white;
+    padding:22px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.topo-sistema h1{margin:0;font-size:24px}
+.topo-sistema p{margin:6px 0 0;font-size:14px;opacity:.95}
+.container{max-width:1450px;margin:auto;padding:20px}
+.card{
+    background:white;
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,.10);
+    border:1px solid #e5eee5;
+}
+.card h2{
+    margin-top:0;
+    color:var(--verde);
+    border-left:5px solid var(--verde2);
+    padding-left:10px;
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+label{font-weight:bold;font-size:13px;color:#2d3b2d}
+input, select, textarea{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border:1px solid #cfd8dc;
+    border-radius:9px;
+    font-size:14px;
+    background:#fff;
+    text-transform:uppercase;
+}
+input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:var(--verde2);
+    box-shadow:0 0 0 3px rgba(46,125,50,.15);
+}
+textarea{min-height:80px;resize:vertical}
+.tabela-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--borda)}
+table{width:100%;border-collapse:collapse}
+th{background:var(--verde);color:white;font-size:12px}
+td, th{border:1px solid #000;padding:6px;text-align:center}
+td input{text-align:center;padding:6px;border-radius:5px}
+.btn{
+    background:var(--verde);
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:bold;
+    margin:4px;
+    transition:.2s;
+}
+.btn:hover{background:#124116;transform:translateY(-1px)}
+.btn-sec{background:#455a64}
+.btn-sec:hover{background:#263238}
+.barra-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.filtros{display:grid;grid-template-columns:200px 1fr;gap:10px;align-items:end}
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:999px;
+    background:var(--verde3);
+    color:var(--verde);
+    font-weight:bold;
+    font-size:12px;
+}
+.alerta{
+    background:#fff8e1;
+    border:1px solid #f9c74f;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:15px;
+    font-size:14px;
+}
+.ok{
+    color:#1b5e20;
+    font-weight:bold;
+}
+
+/* DOCUMENTO A4 */
+#a4{
+    width:210mm;
+    min-height:297mm;
+    background:white;
+    margin:25px auto;
+    padding:13mm 14mm;
+    box-shadow:0 8px 25px rgba(0,0,0,.25);
+    color:#111;
+    font-family:"Times New Roman", Times, serif;
+}
+.doc-moldura{border:2px solid #111;padding:12px;min-height:267mm}
+.doc-cabecalho{
+    display:grid;
+    grid-template-columns:80px 1fr 130px;
+    align-items:center;
+    border-bottom:2px solid #111;
+    padding-bottom:8px;
+    margin-bottom:12px;
+}
+.brasao-fake{
+    width:65px;height:65px;border:2px solid #111;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;text-align:center;font-weight:bold;margin:auto;
+}
+.doc-titulo{text-align:center;line-height:1.2}
+.doc-titulo h3,.doc-titulo h4{margin:2px}
+.doc-numero{border:1px solid #111;padding:8px;text-align:center;font-weight:bold;font-size:14px}
+.doc-assunto{text-align:center;font-weight:bold;margin:12px 0;font-size:16px;text-decoration:underline}
+.doc-texto{font-size:15px;line-height:1.55;text-align:justify}
+.linha-campo{border-bottom:1px solid #111;font-weight:bold;padding:0 4px}
+.tabela-doc{margin-top:10px;font-size:10.5px}
+.tabela-doc th{background:#e5e5e5!important;color:#000!important;font-weight:bold}
+.tabela-doc td,.tabela-doc th{border:1px solid #111;padding:4px}
+.causa-doc{border:1px solid #111;padding:7px;min-height:28px;font-size:14px}
+.obs-doc{min-height:45px;border:1px solid #111;padding:7px;margin-top:6px;font-size:14px}
+.data-doc{margin-top:18px;text-align:right;font-size:15px}
+.assinaturas{display:grid;grid-template-columns:1fr 1fr;gap:35px;margin-top:70px}
+.assinatura{text-align:center;font-size:14px}
+.linha-ass{border-top:1px solid #111;padding-top:5px}
+.nome-servidor-ass{font-weight:bold;margin-top:4px;text-transform:uppercase}
+.rodape-doc{margin-top:35px;border-top:1px solid #111;padding-top:6px;text-align:center;font-size:11px}
+
+@media print{
+    .noprint{display:none!important}
+    body{background:white;margin:0}
+    #a4{margin:0;width:210mm;min-height:297mm;padding:10mm;box-shadow:none}
+    @page{size:A4;margin:8mm}
+}
+</style>
+</head>
+
+<body>
+
+<div class="topo-sistema noprint">
+    <h1>Comunicado de Atualização de Rebanho Bovídeo</h1>
+    <p>Sistema com Supabase, controle automático online, histórico por ano e impressão em A4</p>
+</div>
+
+<div class="container noprint">
+
+    <div class="alerta">
+        <b>Para sanar dúvidas diretamente com o chefe da unidade</b>
+        
+        <span id="statusConexao"></span>
+    </div>
+
+    <div class="card">
+        <h2>Dados do Comunicado</h2>
+
+        <div class="grid">
+            <div>
+                <label>Controle</label>
+                <input id="controle" readonly>
+            </div>
+
+            <div>
+                <label>CPF do Produtor</label>
+                <input id="cpf" placeholder="000.000.000-00">
+            </div>
+
+            <div>
+                <label>Nome do Produtor</label>
+                <input id="nome" placeholder="NOME DO PRODUTOR">
+            </div>
+
+            <div>
+                <label>Nome da Propriedade</label>
+                <input id="propriedade" placeholder="NOME DA PROPRIEDADE">
+            </div>
+
+            <div>
+                <label>Localização / Colocação / Ramal</label>
+                <input id="localizacao" placeholder="Endereço">
+            </div>
+
+            <div>
+                <label>Município</label>
+                <input id="municipio" placeholder="MUNICÍPIO">
+            </div>
+
+            <div>
+                <label>Servidor Responsável</label>
+                <select id="servidor">
+                    <option value="">SELECIONE O SERVIDOR</option>
+                    <option>ANTONIO RODRIGO PIRES SANTIAGO</option>
+                    <option>SAMARA MOREIRA VIEIRA</option>
+                    <option>FRANCISCO MARCOS LIMA DE ANDRADE</option>
+                    <option>RAIMUNDA BESERRA DA SILVA</option>
+                    <option>CASSIA GARCIA DA SILVA</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Tipo de Alteração</label>
+                <select id="tipo" onchange="controlarCausaMorte()">
+                    <option>NASCIMENTOS DE BEZERROS(AS)</option>
+                    <option>MORTES DE BOVÍDEOS(AS)</option>
+                </select>
+            </div>
+
+            <div id="campoCausaMorte" style="display:none;">
+                <label>Causa da Morte</label>
+                <select id="causaMorte">
+                    <option value="NÃO SE APLICA">NÃO SE APLICA</option>
+                    <option>ACIDENTE</option>
+                    <option>ATAQUE DE ANIMAL PEÇONHENTO</option>
+                    <option>ATAQUE DE ANIMAL SILVESTRE</option>
+                    <option>ATROPELAMENTO</option>
+                    <option>BRIGA ENTRE ANIMAIS</option>
+                    <option>CAUSA DESCONHECIDA</option>
+                    <option>COMPLICAÇÃO NO PARTO</option>
+                    <option>DESCARGA ELÉTRICA / RAIO</option>
+                    <option>DESNUTRIÇÃO</option>
+                    <option>DOENÇA RESPIRATÓRIA</option>
+                    <option>DOENÇA DIGESTIVA</option>
+                    <option>DOENÇA NEUROLÓGICA</option>
+                    <option>DOENÇA REPRODUTIVA</option>
+                    <option>DOENÇA PARASITÁRIA</option>
+                    <option>ENFORCAMENTO / ESTRANGULAMENTO</option>
+                    <option>INTOXICAÇÃO POR PLANTA TÓXICA</option>
+                    <option>INTOXICAÇÃO POR PRODUTO QUÍMICO</option>
+                    <option>MASTITE</option>
+                    <option>MORTE SÚBITA</option>
+                    <option>NEONATAL / RECÉM-NASCIDO</option>
+                    <option>PROBLEMAS METABÓLICOS</option>
+                    <option>QUEDA / TRAUMA</option>
+                    <option>SECA / FALTA DE ÁGUA</option>
+                    <option>VELHICE</option>
+                    <option>OUTRA</option>
+                </select>
+            </div>
+        </div>
+
+        <br>
+
+        <h2>Quantidade por Idade e Sexo</h2>
+
+        <div class="tabela-wrap">
+            <table id="tabelaEntrada">
+                <thead>
+                    <tr>
+                        <th>Espécie</th>
+                        <th>0-2 M</th><th>0-2 F</th>
+                        <th>3-8 M</th><th>3-8 F</th>
+                        <th>9-12 M</th><th>9-12 F</th>
+                        <th>13-24 M</th><th>13-24 F</th>
+                        <th>25-36 M</th><th>25-36 F</th>
+                        <th>+36 M</th><th>+36 F</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>BOVINOS</b></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td><input type="number" min="0" value="0" class="bovino"></td>
+                        <td id="totalBovino"><b>0</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>BUBALINOS</b></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td><input type="number" min="0" value="0" class="bubalino"></td>
+                        <td id="totalBubalino"><b>0</b></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <br>
+
+        <label>Observações</label>
+        <textarea id="observacoes" placeholder="DIGITE AS OBSERVAÇÕES"></textarea>
+
+        <div class="barra-acoes">
+            <button class="btn" onclick="salvarEImprimir()">💾🖨️ Salvar no Supabase e Imprimir</button>
+            <button class="btn btn-sec" onclick="limparFormulario()">Novo Comunicado</button>
+            <button class="btn btn-sec" onclick="carregarHistorico()">Atualizar Histórico</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Histórico de Comunicados</h2>
+
+        <div class="filtros">
+            <div>
+                <label>Filtrar por Ano</label>
+                <select id="filtroAno" onchange="carregarHistorico()">
+                    <option value="">TODOS</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Pesquisar por produtor, CPF ou controle</label>
+                <input id="pesquisa" placeholder="PESQUISAR..." oninput="carregarHistorico()">
+            </div>
+        </div>
+
+        <br>
+
+        <div class="tabela-wrap">
+            <table id="historico">
+                <thead>
+                    <tr>
+                        <th>Controle</th>
+                        <th>Data</th>
+                        <th>Produtor</th>
+                        <th>CPF</th>
+                        <th>Ano</th>
+                        <th>Servidor</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="a4">
+    <div class="doc-moldura">
+        <div class="doc-cabecalho">
+            <div class="brasao-fake">ESTADO<br>DO ACRE</div>
+            <div class="doc-titulo">
+                <h3>ESTADO DO ACRE</h3>
+                <h4>INSTITUTO DE DEFESA AGROPECUÁRIA E FLORESTAL</h4>
+                <h4>IDAF</h4>
+            </div>
+            <div class="doc-numero">Nº<br><span id="docControle"></span></div>
+        </div>
+
+        <div class="doc-assunto">COMUNICADO DE ATUALIZAÇÃO DE REBANHO BOVÍDEO</div>
+
+        <p class="doc-texto">
+            Eu, <span class="linha-campo" id="docNome"></span>,
+            CPF nº <span class="linha-campo" id="docCpf"></span>,
+            proprietário do estabelecimento rural denominado
+            <span class="linha-campo" id="docPropriedade"></span>,
+            localizado em <span class="linha-campo" id="docLocalizacao"></span>,
+            município de <span class="linha-campo" id="docMunicipio"></span>,
+            declaro, para fins de atualização de rebanho junto ao IDAF/Acre,
+            que após a última declaração de rebanho, houve as seguintes alterações
+            do rebanho de minha propriedade:
+        </p>
+
+        <p class="doc-texto"><b>Tipo da alteração:</b> <span class="linha-campo" id="docTipo"></span></p>
+
+        <table class="tabela-doc">
+            <thead>
+                <tr>
+                    <th>Espécie</th>
+                    <th>0-2 M</th><th>0-2 F</th>
+                    <th>3-8 M</th><th>3-8 F</th>
+                    <th>9-12 M</th><th>9-12 F</th>
+                    <th>13-24 M</th><th>13-24 F</th>
+                    <th>25-36 M</th><th>25-36 F</th>
+                    <th>+36 M</th><th>+36 F</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="corpoTabelaImpressao"></tbody>
+        </table>
+
+        <div id="areaCausaMorteImpressao">
+            <p class="doc-texto"><b>Causa da morte:</b></p>
+            <div class="causa-doc" id="docCausaMorte"></div>
+        </div>
+
+        <p class="doc-texto"><b>Observações:</b></p>
+        <div class="obs-doc" id="docObservacoes"></div>
+
+        <p class="data-doc"><span id="docMunicipioData"></span>, <span id="docData"></span>.</p>
+
+        <div class="assinaturas">
+            <div class="assinatura"><div class="linha-ass">Assinatura do Proprietário</div></div>
+            <div class="assinatura">
+                <div class="linha-ass">Assinatura e carimbo do Servidor Responsável</div>
+                <div class="nome-servidor-ass" id="docServidorAssinatura"></div>
+            </div>
+        </div>
+
+        <div class="rodape-doc">Documento gerado para fins de controle interno e atualização de rebanho junto ao IDAF/Acre.</div>
+    </div>
+</div>
+
+<script>
+/* =========================================================
+   CONFIGURAÇÃO DO SUPABASE
+   Troque pelos dados do seu projeto:
+   Project Settings > API > Project URL e anon public key
+========================================================= */
+const SUPABASE_URL = "https://ilpdpnxpfykshzzoskta.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscGRwbnhwZnlrc2h6em9za3RhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDkwNTMsImV4cCI6MjA5Njc4NTA1M30.a_UPkHq2Z9dJ835BuSFBQjO_sxmV9VevMFqHxvt28gc";
+
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const TABELA = "comunicados_rebanho";
+
+let comunicadosCache = [];
+
+function supabaseConfigurado(){
+    return SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length > 20;
+}
+
+function mostrarStatus(){
+    const status = document.getElementById("statusConexao");
+    if(supabaseConfigurado()){
+        status.innerHTML = ' <span class="ok">Supabase configurado.</span>';
+    }else{
+        status.innerHTML = ' <b style="color:#b00020">Supabase ainda não configurado no código.</b>';
+    }
+}
+
+const camposMaiusculos = document.querySelectorAll("input:not([type='number']), textarea");
+camposMaiusculos.forEach(campo => {
+    campo.addEventListener("input", () => {
+        const pos = campo.selectionStart;
+        campo.value = campo.value.toUpperCase();
+        campo.setSelectionRange(pos, pos);
+    });
+});
+
+function controlarCausaMorte(){
+    const campo = document.getElementById("campoCausaMorte");
+    const causa = document.getElementById("causaMorte");
+
+    if(tipo.value.includes("MORTES")){
+        campo.style.display = "block";
+        causa.disabled = false;
+
+        if(causa.value === "" || causa.value === "NÃO SE APLICA"){
+            causa.value = "CAUSA DESCONHECIDA";
+        }
+    }else{
+        campo.style.display = "none";
+        causa.value = "NÃO SE APLICA";
+        causa.disabled = true;
+    }
+}
+
+async function obterControleAtual(){
+    if(!supabaseConfigurado()){
+        controle.value = "0001/" + new Date().getFullYear();
+        return;
+    }
+
+    const ano = new Date().getFullYear();
+
+    const { data, error } = await supabaseClient.rpc("proximo_controle", {
+        p_ano: ano
+    });
+
+    if(error){
+        console.error(error);
+        alert("Erro ao gerar número de controle no Supabase: " + error.message);
+        controle.value = "ERRO";
+        return;
+    }
+
+    controle.value = data;
+}
+
+function valoresDaLinha(classe){
+    const valores = [];
+    document.querySelectorAll("." + classe).forEach(campo => {
+        valores.push(Number(campo.value || 0));
+    });
+    return valores;
+}
+
+function somarArray(arr){
+    return arr.reduce((a,b) => a + Number(b || 0), 0);
+}
+
+function atualizarTotais(){
+    const bovinos = valoresDaLinha("bovino");
+    const bubalinos = valoresDaLinha("bubalino");
+
+    document.getElementById("totalBovino").innerHTML = "<b>" + somarArray(bovinos) + "</b>";
+    document.getElementById("totalBubalino").innerHTML = "<b>" + somarArray(bubalinos) + "</b>";
+}
+
+document.querySelectorAll("input[type='number']").forEach(campo => {
+    campo.addEventListener("input", atualizarTotais);
+});
+
+function dataAtualISO(){
+    return new Date().toISOString().slice(0,10);
+}
+
+function dataBR(dataISO){
+    if(!dataISO) return "";
+    const partes = dataISO.split("-");
+    if(partes.length === 3){
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+    return dataISO;
+}
+
+function montarLinhaTabela(especie, valores){
+    const total = somarArray(valores);
+    return `
+        <tr>
+            <td><b>${especie}</b></td>
+            ${valores.map(v => `<td>${Number(v || 0)}</td>`).join("")}
+            <td><b>${total}</b></td>
+        </tr>
+    `;
+}
+
+function gerarDocumento(registro = null){
+    atualizarTotais();
+    controlarCausaMorte();
+
+    const dados = registro || {
+        controle: controle.value,
+        nome: nome.value,
+        cpf: cpf.value,
+        propriedade: propriedade.value,
+        localizacao: localizacao.value,
+        municipio: municipio.value,
+        servidor: servidor.value,
+        tipo: tipo.value,
+        causa_morte: causaMorte.value || "NÃO SE APLICA",
+        observacoes: observacoes.value,
+        bovinos: valoresDaLinha("bovino"),
+        bubalinos: valoresDaLinha("bubalino"),
+        data_emissao: dataAtualISO()
+    };
+
+    const ehMorte = dados.tipo && dados.tipo.includes("MORTES");
+
+    document.getElementById("docControle").innerText = dados.controle || "";
+    document.getElementById("docNome").innerText = dados.nome || "";
+    document.getElementById("docCpf").innerText = dados.cpf || "";
+    document.getElementById("docPropriedade").innerText = dados.propriedade || "";
+    document.getElementById("docLocalizacao").innerText = dados.localizacao || "";
+    document.getElementById("docMunicipio").innerText = dados.municipio || "";
+    document.getElementById("docTipo").innerText = dados.tipo || "";
+    document.getElementById("docObservacoes").innerText = dados.observacoes || " ";
+    document.getElementById("docServidorAssinatura").innerText = dados.servidor || "";
+    document.getElementById("docMunicipioData").innerText = dados.municipio || "______________";
+    document.getElementById("docData").innerText = dataBR(dados.data_emissao);
+
+    document.getElementById("corpoTabelaImpressao").innerHTML =
+        montarLinhaTabela("BOVINOS", dados.bovinos || []) +
+        montarLinhaTabela("BUBALINOS", dados.bubalinos || []);
+
+    if(ehMorte){
+        document.getElementById("areaCausaMorteImpressao").style.display = "block";
+        document.getElementById("docCausaMorte").innerText = dados.causa_morte || "CAUSA DESCONHECIDA";
+    }else{
+        document.getElementById("areaCausaMorteImpressao").style.display = "none";
+        document.getElementById("docCausaMorte").innerText = "NÃO SE APLICA";
+    }
+}
+
+async function salvarEImprimir(){
+    if(!supabaseConfigurado()){
+        alert("Configure primeiro a URL e a chave anon pública do Supabase no código.");
+        return;
+    }
+
+    if(!nome.value.trim()){
+        alert("Informe o nome do produtor.");
+        return;
+    }
+
+    if(!servidor.value.trim()){
+        alert("Selecione o servidor responsável.");
+        return;
+    }
+
+    gerarDocumento();
+
+    const registro = {
+        controle: controle.value,
+        ano: Number(controle.value.split("/")[1]),
+        data_emissao: dataAtualISO(),
+
+        nome: nome.value,
+        cpf: cpf.value,
+        propriedade: propriedade.value,
+        localizacao: localizacao.value,
+        municipio: municipio.value,
+
+        servidor: servidor.value,
+        tipo: tipo.value,
+        causa_morte: causaMorte.value || "NÃO SE APLICA",
+        observacoes: observacoes.value,
+
+        bovinos: valoresDaLinha("bovino"),
+        bubalinos: valoresDaLinha("bubalino")
+    };
+
+    const { error } = await supabaseClient
+        .from(TABELA)
+        .insert(registro);
+
+    if(error){
+        console.error(error);
+        alert("Erro ao salvar no Supabase: " + error.message);
+        return;
+    }
+
+    await carregarHistorico();
+
+    setTimeout(() => {
+        window.print();
+        limparFormulario(true);
+    }, 300);
+}
+
+function abrirComunicado(index){
+    const registro = comunicadosCache[index];
+
+    if(!registro){
+        alert("Comunicado não encontrado.");
+        return;
+    }
+
+    gerarDocumento(registro);
+
+    document.getElementById("a4").scrollIntoView({
+        behavior:"smooth"
+    });
+}
+
+function reimprimirComunicado(index){
+    abrirComunicado(index);
+    setTimeout(() => window.print(), 300);
+}
+
+async function carregarHistorico(){
+    if(!supabaseConfigurado()){
+        document.querySelector("#historico tbody").innerHTML =
+            '<tr><td colspan="7">Configure o Supabase para carregar o histórico.</td></tr>';
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from(TABELA)
+        .select("*")
+        .order("id", { ascending:false });
+
+    if(error){
+        console.error(error);
+        alert("Erro ao carregar histórico: " + error.message);
+        return;
+    }
+
+    comunicadosCache = data || [];
+    carregarAnos();
+    renderizarHistorico();
+}
+
+function carregarAnos(){
+    const anos = [...new Set(comunicadosCache.map(item => String(item.ano)))].sort().reverse();
+    const filtro = document.getElementById("filtroAno");
+    const anoSelecionado = filtro.value;
+
+    filtro.innerHTML = '<option value="">TODOS</option>';
+
+    anos.forEach(ano => {
+        const option = document.createElement("option");
+        option.value = ano;
+        option.textContent = ano;
+        filtro.appendChild(option);
+    });
+
+    filtro.value = anoSelecionado;
+}
+
+function renderizarHistorico(){
+    const tbody = document.querySelector("#historico tbody");
+    const anoFiltro = document.getElementById("filtroAno").value;
+    const textoPesquisa = document.getElementById("pesquisa").value.toUpperCase();
+
+    tbody.innerHTML = "";
+
+    comunicadosCache.forEach((item, index) => {
+        const passaAno = !anoFiltro || String(item.ano) === anoFiltro;
+
+        const basePesquisa = `
+            ${item.controle}
+            ${item.nome}
+            ${item.cpf}
+            ${item.servidor}
+            ${item.municipio}
+        `.toUpperCase();
+
+        const passaPesquisa = !textoPesquisa || basePesquisa.includes(textoPesquisa);
+
+        if(passaAno && passaPesquisa){
+            tbody.innerHTML += `
+                <tr>
+                    <td><span class="badge">${item.controle}</span></td>
+                    <td>${dataBR(item.data_emissao)}</td>
+                    <td>${item.nome || ""}</td>
+                    <td>${item.cpf || ""}</td>
+                    <td>${item.ano || ""}</td>
+                    <td>${item.servidor || ""}</td>
+                    <td>
+                        <button class="btn btn-sec" onclick="abrirComunicado(${index})">Abrir</button>
+                        <button class="btn" onclick="reimprimirComunicado(${index})">Reimprimir</button>
+                    </td>
+                </tr>
+            `;
+        }
+    });
+
+    if(tbody.innerHTML === ""){
+        tbody.innerHTML = '<tr><td colspan="7">Nenhum comunicado encontrado.</td></tr>';
+    }
+}
+
+document.getElementById("filtroAno").addEventListener("change", renderizarHistorico);
+document.getElementById("pesquisa").addEventListener("input", renderizarHistorico);
+
+async function limparFormulario(gerarNovoControle = false){
+    document.querySelectorAll("input:not([readonly]), textarea").forEach(campo => {
+        if(campo.type === "number"){
+            campo.value = 0;
+        }else{
+            campo.value = "";
+        }
+    });
+
+    document.getElementById("tipo").selectedIndex = 0;
+    document.getElementById("servidor").selectedIndex = 0;
+    document.getElementById("causaMorte").value = "NÃO SE APLICA";
+
+    atualizarTotais();
+    controlarCausaMorte();
+
+    if(gerarNovoControle){
+        await obterControleAtual();
+    }
+
+    gerarDocumento();
+}
+
+async function iniciar(){
+    mostrarStatus();
+    atualizarTotais();
+    controlarCausaMorte();
+
+    if(supabaseConfigurado()){
+        await obterControleAtual();
+        await carregarHistorico();
+    }else{
+        controle.value = "0001/" + new Date().getFullYear();
+    }
+
+    gerarDocumento();
+}
+
+iniciar();
+</script>
+
+</body>
+</html>
