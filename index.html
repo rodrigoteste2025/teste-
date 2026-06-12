@@ -163,13 +163,12 @@ td input{text-align:center;padding:6px;border-radius:5px}
 
 <div class="topo-sistema noprint">
     <h1>Comunicado de Atualização de Rebanho Bovídeo</h1>
-   
+    
 </div>
 
 <div class="container noprint">
 
     <div class="alerta">
-        <b>Para sanar dúvidas diretamente com o chefe da unidade</b>
         
         <span id="statusConexao"></span>
     </div>
@@ -200,7 +199,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
 
             <div>
                 <label>Localização / Colocação / Ramal</label>
-                <input id="localizacao" placeholder="Endereço">
+                <input id="localizacao" placeholder="ENDEREÇO">
             </div>
 
             <div>
@@ -216,8 +215,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
                     <option>SAMARA MOREIRA VIEIRA</option>
                     <option>FRANCISCO MARCOS LIMA DE ANDRADE</option>
                     <option>RAIMUNDA BESERRA DA SILVA</option>
-                    <option>CASSIA GARCIA DA SILVA</option>
-                    <option>JANIEL CERQUEIRA DA SILVA </option>
+                    <option>CASSIA GARCIA CORREIA</option>
                 </select>
             </div>
 
@@ -230,7 +228,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
             </div>
 
             <div id="campoCausaMorte" style="display:none;">
-                <label>Causa da Morte</label>
+                <label>Causa da Morte</label>A
                 <select id="causaMorte">
                     <option value="NÃO SE APLICA">NÃO SE APLICA</option>
                     <option>ACIDENTE</option>
@@ -374,7 +372,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
             <div class="doc-titulo">
                 <h3>ESTADO DO ACRE</h3>
                 <h4>INSTITUTO DE DEFESA AGROPECUÁRIA E FLORESTAL</h4>
-                <h4>IDAF</h4>
+                <h4>IDAF-UNIDADE DE BRASILÉIA </h4>
             </div>
             <div class="doc-numero">Nº<br><span id="docControle"></span></div>
         </div>
@@ -429,7 +427,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
             </div>
         </div>
 
-        <div class="rodape-doc">Documento gerado para fins de controle interno e atualização de rebanho junto ao IDAF/Acre.</div>
+        <div class="rodape-doc">Documento gerado para fins de controle interno e atualização de rebanho junto a unidade de Brasiléia.</div>
     </div>
 </div>
 
@@ -487,10 +485,10 @@ function controlarCausaMorte(){
     }
 }
 
-async function obterControleAtual(){
+async function gerarControleSomenteAoSalvar(){
     if(!supabaseConfigurado()){
         controle.value = "0001/" + new Date().getFullYear();
-        return;
+        return false;
     }
 
     const ano = new Date().getFullYear();
@@ -503,10 +501,11 @@ async function obterControleAtual(){
         console.error(error);
         alert("Erro ao gerar número de controle no Supabase: " + error.message);
         controle.value = "ERRO";
-        return;
+        return false;
     }
 
     controle.value = data;
+    return true;
 }
 
 function valoresDaLinha(classe){
@@ -620,6 +619,12 @@ async function salvarEImprimir(){
         return;
     }
 
+    const controleGerado = await gerarControleSomenteAoSalvar();
+
+    if(!controleGerado){
+        return;
+    }
+
     gerarDocumento();
 
     const registro = {
@@ -656,7 +661,7 @@ async function salvarEImprimir(){
 
     setTimeout(() => {
         window.print();
-        limparFormulario(true);
+        limparFormulario();
     }, 300);
 }
 
@@ -766,7 +771,7 @@ function renderizarHistorico(){
 document.getElementById("filtroAno").addEventListener("change", renderizarHistorico);
 document.getElementById("pesquisa").addEventListener("input", renderizarHistorico);
 
-async function limparFormulario(gerarNovoControle = false){
+async function limparFormulario(){
     document.querySelectorAll("input:not([readonly]), textarea").forEach(campo => {
         if(campo.type === "number"){
             campo.value = 0;
@@ -779,13 +784,10 @@ async function limparFormulario(gerarNovoControle = false){
     document.getElementById("servidor").selectedIndex = 0;
     document.getElementById("causaMorte").value = "NÃO SE APLICA";
 
+    controle.value = "SERÁ GERADO AO SALVAR";
+
     atualizarTotais();
     controlarCausaMorte();
-
-    if(gerarNovoControle){
-        await obterControleAtual();
-    }
-
     gerarDocumento();
 }
 
@@ -795,10 +797,10 @@ async function iniciar(){
     controlarCausaMorte();
 
     if(supabaseConfigurado()){
-        await obterControleAtual();
+        controle.value = "SERÁ GERADO AO SALVAR";
         await carregarHistorico();
     }else{
-        controle.value = "0001/" + new Date().getFullYear();
+        controle.value = "SERÁ GERADO AO SALVAR";
     }
 
     gerarDocumento();
