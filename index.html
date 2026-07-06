@@ -150,6 +150,127 @@ td input{text-align:center;padding:6px;border-radius:5px}
 .nome-servidor-ass{font-weight:bold;margin-top:4px;text-transform:uppercase}
 .rodape-doc{margin-top:35px;border-top:1px solid #111;padding-top:6px;text-align:center;font-size:11px}
 
+
+/* MODAL DE CONFIRMAÇÃO */
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:15px;
+}
+
+.modal-box{
+    background:white;
+    width:100%;
+    max-width:560px;
+    border-radius:16px;
+    box-shadow:0 12px 35px rgba(0,0,0,.35);
+    overflow:hidden;
+    animation:subir .18s ease-out;
+}
+
+@keyframes subir{
+    from{transform:translateY(20px);opacity:.7}
+    to{transform:translateY(0);opacity:1}
+}
+
+.modal-header{
+    background:linear-gradient(90deg,var(--verde),var(--verde2));
+    color:white;
+    padding:16px 18px;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.modal-body{
+    padding:18px;
+    line-height:1.45;
+}
+
+.modal-resumo{
+    background:#f4f8f4;
+    border:1px solid #d7e7d7;
+    border-radius:10px;
+    padding:12px;
+    margin-top:10px;
+    font-size:14px;
+}
+
+.modal-resumo p{
+    margin:6px 0;
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    padding:14px 18px 18px;
+    border-top:1px solid #e5e7eb;
+}
+
+.btn-cancelar{
+    background:#607d8b;
+}
+
+.btn-cancelar:hover{
+    background:#455a64;
+}
+
+.btn-confirmar{
+    background:#1b5e20;
+}
+
+.btn-confirmar:hover{
+    background:#124116;
+}
+
+.btn[disabled]{
+    opacity:.65;
+    cursor:not-allowed;
+    transform:none!important;
+}
+
+
+.modal-tabela-wrap{
+    overflow-x:auto;
+    margin-top:12px;
+    border:1px solid #c8d6c8;
+    border-radius:10px;
+}
+
+.modal-tabela{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12px;
+}
+
+.modal-tabela th{
+    background:#1b5e20;
+    color:white;
+    padding:5px;
+    border:1px solid #0f3d12;
+}
+
+.modal-tabela td{
+    padding:5px;
+    border:1px solid #9aa99a;
+    text-align:center;
+}
+
+.modal-total{
+    margin-top:10px;
+    background:#e8f5e9;
+    border:1px solid #b7d8b8;
+    border-radius:8px;
+    padding:8px;
+    font-weight:bold;
+    color:#1b5e20;
+}
+
 @media print{
     .noprint{display:none!important}
     body{background:white;margin:0}
@@ -163,15 +284,10 @@ td input{text-align:center;padding:6px;border-radius:5px}
 
 <div class="topo-sistema noprint">
     <h1>Comunicado de Atualização de Rebanho Bovídeo</h1>
-    
+    <p>Sistema com Supabase, controle automático online, histórico por ano e impressão em A4</p>
 </div>
 
 <div class="container noprint">
-
-    <div class="alerta">
-        
-        <span id="statusConexao"></span>
-    </div>
 
     <div class="card">
         <h2>Dados do Comunicado</h2>
@@ -199,7 +315,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
 
             <div>
                 <label>Localização / Colocação / Ramal</label>
-                <input id="localizacao" placeholder="ENDEREÇO">
+                <input id="localizacao" placeholder="Endereço">
             </div>
 
             <div>
@@ -216,7 +332,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
                     <option>FRANCISCO MARCOS LIMA DE ANDRADE</option>
                     <option>RAIMUNDA BESERRA DA SILVA</option>
                     <option>CASSIA GARCIA CORREIA</option>
-                    <option>JANIEL CERQUEIRA DA SILVA</option>
+                    <option>LUCIENE DA CONCEIÇÃO SALES</option>
                 </select>
             </div>
 
@@ -229,7 +345,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
             </div>
 
             <div id="campoCausaMorte" style="display:none;">
-                <label>Causa da Morte</label>A
+                <label>Causa da Morte</label>
                 <select id="causaMorte">
                     <option value="NÃO SE APLICA">NÃO SE APLICA</option>
                     <option>ACIDENTE</option>
@@ -322,7 +438,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
         <textarea id="observacoes" placeholder="DIGITE AS OBSERVAÇÕES"></textarea>
 
         <div class="barra-acoes">
-            <button class="btn" onclick="salvarEImprimir()">💾🖨️ Salvar e Imprimir</button>
+            <button id="btnSalvarImprimir" class="btn" onclick="abrirConfirmacao()">💾🖨️ Salvar no Supabase e Imprimir</button>
             <button class="btn btn-sec" onclick="limparFormulario()">Novo Comunicado</button>
             <button class="btn btn-sec" onclick="carregarHistorico()">Atualizar Histórico</button>
         </div>
@@ -366,6 +482,62 @@ td input{text-align:center;padding:6px;border-radius:5px}
     </div>
 </div>
 
+
+<div id="modalConfirmacao" class="modal-overlay noprint">
+    <div class="modal-box">
+        <div class="modal-header">
+            Confirmar emissão do comunicado
+        </div>
+
+        <div class="modal-body">
+            Confira as informações antes de salvar. Após confirmar, o sistema vai gerar o número de controle, salvar no Supabase e abrir a impressão.
+
+            <div class="modal-resumo">
+                <p><b>Próximo controle:</b> <span id="resumoControle"></span></p>
+                <p><b>Produtor:</b> <span id="resumoProdutor"></span></p>
+                <p><b>CPF:</b> <span id="resumoCpf"></span></p>
+                <p><b>Propriedade:</b> <span id="resumoPropriedade"></span></p>
+                <p><b>Município:</b> <span id="resumoMunicipio"></span></p>
+                <p><b>Tipo:</b> <span id="resumoTipo"></span></p>
+                <p><b>Servidor:</b> <span id="resumoServidor"></span></p>
+
+                <div class="modal-tabela-wrap">
+                    <table class="modal-tabela">
+                        <thead>
+                            <tr>
+                                <th>Espécie</th>
+                                <th>0-2 M</th>
+                                <th>0-2 F</th>
+                                <th>3-8 M</th>
+                                <th>3-8 F</th>
+                                <th>9-12 M</th>
+                                <th>9-12 F</th>
+                                <th>13-24 M</th>
+                                <th>13-24 F</th>
+                                <th>25-36 M</th>
+                                <th>25-36 F</th>
+                                <th>+36 M</th>
+                                <th>+36 F</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resumoTabelaAnimais"></tbody>
+                    </table>
+                </div>
+
+                <div class="modal-total">
+                    Total geral de animais: <span id="resumoTotalGeral">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button id="btnCancelarConfirmacao" class="btn btn-cancelar" onclick="fecharConfirmacao()">Cancelar</button>
+            <button id="btnConfirmarSalvar" class="btn btn-confirmar" onclick="confirmarSalvarEImprimir()">Confirmar e Imprimir</button>
+        </div>
+    </div>
+</div>
+
 <div id="a4">
     <div class="doc-moldura">
         <div class="doc-cabecalho">
@@ -373,7 +545,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
             <div class="doc-titulo">
                 <h3>ESTADO DO ACRE</h3>
                 <h4>INSTITUTO DE DEFESA AGROPECUÁRIA E FLORESTAL</h4>
-                <h4>IDAF-UNIDADE DE BRASILÉIA </h4>
+                <h4>IDAF</h4>
             </div>
             <div class="doc-numero">Nº<br><span id="docControle"></span></div>
         </div>
@@ -428,7 +600,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
             </div>
         </div>
 
-        <div class="rodape-doc">Documento gerado para fins de controle interno e atualização de rebanho junto a unidade de Brasiléia.</div>
+        <div class="rodape-doc">Documento gerado para fins de controle interno e atualização de rebanho junto ao unidade de Brasiléia.</div>
     </div>
 </div>
 
@@ -445,6 +617,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const TABELA = "comunicados_rebanho";
 
 let comunicadosCache = [];
+let salvandoComunicado = false;
 
 function supabaseConfigurado(){
     return SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length > 20;
@@ -452,6 +625,10 @@ function supabaseConfigurado(){
 
 function mostrarStatus(){
     const status = document.getElementById("statusConexao");
+    if(!status){
+        return;
+    }
+
     if(supabaseConfigurado()){
         status.innerHTML = ' <span class="ok">Supabase configurado.</span>';
     }else{
@@ -484,6 +661,34 @@ function controlarCausaMorte(){
         causa.value = "NÃO SE APLICA";
         causa.disabled = true;
     }
+}
+
+
+async function mostrarProximoControle(){
+    if(!supabaseConfigurado()){
+        controle.value = "0001/" + new Date().getFullYear();
+        return;
+    }
+
+    const ano = new Date().getFullYear();
+
+    const { data, error } = await supabaseClient
+        .from("controles_comunicados")
+        .select("ultimo_numero")
+        .eq("ano", ano)
+        .maybeSingle();
+
+    if(error){
+        console.error(error);
+        controle.value = "PRÓXIMO 0001/" + ano;
+        return;
+    }
+
+    const proximo = data && data.ultimo_numero
+        ? Number(data.ultimo_numero) + 1
+        : 1;
+
+    controle.value = String(proximo).padStart(4,"0") + "/" + ano;
 }
 
 async function gerarControleSomenteAoSalvar(){
@@ -604,7 +809,38 @@ function gerarDocumento(registro = null){
     }
 }
 
-async function salvarEImprimir(){
+
+
+function montarLinhaResumoModal(especie, valores){
+    const total = somarArray(valores);
+
+    return `
+        <tr>
+            <td><b>${especie}</b></td>
+            ${valores.map(v => `<td>${Number(v || 0)}</td>`).join("")}
+            <td><b>${total}</b></td>
+        </tr>
+    `;
+}
+
+function atualizarResumoAnimaisModal(){
+    const bovinosResumo = valoresDaLinha("bovino");
+    const bubalinosResumo = valoresDaLinha("bubalino");
+
+    document.getElementById("resumoTabelaAnimais").innerHTML =
+        montarLinhaResumoModal("BOVINOS", bovinosResumo) +
+        montarLinhaResumoModal("BUBALINOS", bubalinosResumo);
+
+    document.getElementById("resumoTotalGeral").innerText =
+        somarArray(bovinosResumo) + somarArray(bubalinosResumo);
+}
+
+
+function abrirConfirmacao(){
+    if(salvandoComunicado){
+        return;
+    }
+
     if(!supabaseConfigurado()){
         alert("Configure primeiro a URL e a chave anon pública do Supabase no código.");
         return;
@@ -620,9 +856,106 @@ async function salvarEImprimir(){
         return;
     }
 
+    atualizarTotais();
+    controlarCausaMorte();
+
+    document.getElementById("resumoControle").innerText = controle.value || "PRÓXIMO CONTROLE";
+    document.getElementById("resumoProdutor").innerText = nome.value || "-";
+    document.getElementById("resumoCpf").innerText = cpf.value || "-";
+    document.getElementById("resumoPropriedade").innerText = propriedade.value || "-";
+    document.getElementById("resumoMunicipio").innerText = municipio.value || "-";
+    document.getElementById("resumoTipo").innerText = tipo.value || "-";
+    document.getElementById("resumoServidor").innerText = servidor.value || "-";
+
+    atualizarResumoAnimaisModal();
+
+    document.getElementById("modalConfirmacao").style.display = "flex";
+}
+
+function fecharConfirmacao(){
+    if(salvandoComunicado){
+        return;
+    }
+
+    document.getElementById("modalConfirmacao").style.display = "none";
+}
+
+async function confirmarSalvarEImprimir(){
+    await salvarEImprimir();
+}
+
+function travarBotoesSalvar(){
+    salvandoComunicado = true;
+
+    const btnSalvar = document.getElementById("btnSalvarImprimir");
+    const btnConfirmar = document.getElementById("btnConfirmarSalvar");
+    const btnCancelar = document.getElementById("btnCancelarConfirmacao");
+
+    if(btnSalvar){
+        btnSalvar.disabled = true;
+        btnSalvar.innerText = "⏳ Salvando...";
+    }
+
+    if(btnConfirmar){
+        btnConfirmar.disabled = true;
+        btnConfirmar.innerText = "Salvando...";
+    }
+
+    if(btnCancelar){
+        btnCancelar.disabled = true;
+    }
+}
+
+function liberarBotoesSalvar(){
+    salvandoComunicado = false;
+
+    const btnSalvar = document.getElementById("btnSalvarImprimir");
+    const btnConfirmar = document.getElementById("btnConfirmarSalvar");
+    const btnCancelar = document.getElementById("btnCancelarConfirmacao");
+
+    if(btnSalvar){
+        btnSalvar.disabled = false;
+        btnSalvar.innerText = "💾🖨️ Salvar no Supabase e Imprimir";
+    }
+
+    if(btnConfirmar){
+        btnConfirmar.disabled = false;
+        btnConfirmar.innerText = "Confirmar e Imprimir";
+    }
+
+    if(btnCancelar){
+        btnCancelar.disabled = false;
+    }
+}
+
+
+async function salvarEImprimir(){
+    if(salvandoComunicado){
+        return;
+    }
+
+    if(!supabaseConfigurado()){
+        alert("Configure primeiro a URL e a chave anon pública do Supabase no código.");
+        return;
+    }
+
+    if(!nome.value.trim()){
+        alert("Informe o nome do produtor.");
+        return;
+    }
+
+    if(!servidor.value.trim()){
+        alert("Selecione o servidor responsável.");
+        return;
+    }
+
+    travarBotoesSalvar();
+    document.getElementById("modalConfirmacao").style.display = "none";
+
     const controleGerado = await gerarControleSomenteAoSalvar();
 
     if(!controleGerado){
+        liberarBotoesSalvar();
         return;
     }
 
@@ -655,14 +988,17 @@ async function salvarEImprimir(){
     if(error){
         console.error(error);
         alert("Erro ao salvar no Supabase: " + error.message);
+        liberarBotoesSalvar();
+        await mostrarProximoControle();
         return;
     }
 
     await carregarHistorico();
 
-    setTimeout(() => {
+    setTimeout(async () => {
         window.print();
-        limparFormulario();
+        await limparFormulario();
+        liberarBotoesSalvar();
     }, 300);
 }
 
@@ -785,7 +1121,7 @@ async function limparFormulario(){
     document.getElementById("servidor").selectedIndex = 0;
     document.getElementById("causaMorte").value = "NÃO SE APLICA";
 
-    controle.value = "SERÁ GERADO AO SALVAR";
+    await mostrarProximoControle();
 
     atualizarTotais();
     controlarCausaMorte();
@@ -798,14 +1134,26 @@ async function iniciar(){
     controlarCausaMorte();
 
     if(supabaseConfigurado()){
-        controle.value = "SERÁ GERADO AO SALVAR";
+        await mostrarProximoControle();
         await carregarHistorico();
     }else{
-        controle.value = "SERÁ GERADO AO SALVAR";
+        controle.value = "0001/" + new Date().getFullYear();
     }
 
     gerarDocumento();
 }
+
+document.addEventListener("keydown", function(event){
+    if(event.key === "Escape"){
+        fecharConfirmacao();
+    }
+});
+
+document.getElementById("modalConfirmacao").addEventListener("click", function(event){
+    if(event.target === this){
+        fecharConfirmacao();
+    }
+});
 
 iniciar();
 </script>
