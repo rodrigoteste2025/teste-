@@ -9,27 +9,27 @@
 
 <style>
 :root{
-    --verde:#1b5e20;
-    --verde2:#2e7d32;
-    --verde3:#e8f5e9;
-    --borda:#c8d6c8;
+    --azul:#0756a6;
+    --azul2:#0b78d0;
+    --azul3:#eaf4ff;
+    --borda:#c9d9ea;
     --texto:#1f2933;
 }
 *{box-sizing:border-box}
 body{
     margin:0;
     font-family:Arial, Helvetica, sans-serif;
-    background:linear-gradient(135deg,#eef6ee,#f8faf8);
+    background:linear-gradient(135deg,#eef5fc,#f8fbff);
     color:var(--texto);
 }
 .topo-sistema{
-    background:linear-gradient(90deg,var(--verde),var(--verde2));
+    background:linear-gradient(90deg,var(--azul),var(--azul2));
     color:white;
     padding:22px;
     text-align:center;
     box-shadow:0 2px 8px rgba(0,0,0,.25);
 }
-.topo-sistema h1{margin:0;font-size:24px}
+.topo-sistema h1{margin:0;font-size:26px;letter-spacing:.2px}
 .topo-sistema p{margin:6px 0 0;font-size:14px;opacity:.95}
 .container{max-width:1450px;margin:auto;padding:20px}
 .card{
@@ -42,8 +42,8 @@ body{
 }
 .card h2{
     margin-top:0;
-    color:var(--verde);
-    border-left:5px solid var(--verde2);
+    color:var(--azul);
+    border-left:5px solid var(--azul2);
     padding-left:10px;
 }
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
@@ -60,17 +60,17 @@ input, select, textarea{
 }
 input:focus, select:focus, textarea:focus{
     outline:none;
-    border-color:var(--verde2);
-    box-shadow:0 0 0 3px rgba(46,125,50,.15);
+    border-color:var(--azul2);
+    box-shadow:0 0 0 3px rgba(11,120,208,.15);
 }
 textarea{min-height:80px;resize:vertical}
 .tabela-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--borda)}
 table{width:100%;border-collapse:collapse}
-th{background:var(--verde);color:white;font-size:12px}
+th{background:var(--azul);color:white;font-size:12px}
 td, th{border:1px solid #000;padding:6px;text-align:center}
 td input{text-align:center;padding:6px;border-radius:5px}
 .btn{
-    background:var(--verde);
+    background:var(--azul);
     color:white;
     border:none;
     padding:12px 18px;
@@ -80,7 +80,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
     margin:4px;
     transition:.2s;
 }
-.btn:hover{background:#124116;transform:translateY(-1px)}
+.btn:hover{background:#064784;transform:translateY(-1px)}
 .btn-sec{background:#455a64}
 .btn-sec:hover{background:#263238}
 .barra-acoes{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
@@ -89,8 +89,8 @@ td input{text-align:center;padding:6px;border-radius:5px}
     display:inline-block;
     padding:5px 9px;
     border-radius:999px;
-    background:var(--verde3);
-    color:var(--verde);
+    background:var(--azul3);
+    color:var(--azul);
     font-weight:bold;
     font-size:12px;
 }
@@ -103,7 +103,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
     font-size:14px;
 }
 .ok{
-    color:#1b5e20;
+    color:var(--azul);
     font-weight:bold;
 }
 
@@ -179,7 +179,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
 }
 
 .modal-header{
-    background:linear-gradient(90deg,var(--verde),var(--verde2));
+    background:linear-gradient(90deg,var(--azul),var(--azul2));
     color:white;
     padding:16px 18px;
     font-weight:bold;
@@ -192,8 +192,8 @@ td input{text-align:center;padding:6px;border-radius:5px}
 }
 
 .modal-resumo{
-    background:#f4f8f4;
-    border:1px solid #d7e7d7;
+    background:#f3f8fd;
+    border:1px solid #d5e5f5;
     border-radius:10px;
     padding:12px;
     margin-top:10px;
@@ -221,7 +221,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
 }
 
 .btn-confirmar{
-    background:#1b5e20;
+    background:var(--azul);
 }
 
 .btn-confirmar:hover{
@@ -238,7 +238,7 @@ td input{text-align:center;padding:6px;border-radius:5px}
 .modal-tabela-wrap{
     overflow-x:auto;
     margin-top:12px;
-    border:1px solid #c8d6c8;
+    border:1px solid #c9d9ea;
     border-radius:10px;
 }
 
@@ -249,10 +249,10 @@ td input{text-align:center;padding:6px;border-radius:5px}
 }
 
 .modal-tabela th{
-    background:#1b5e20;
+    background:var(--azul);
     color:white;
     padding:5px;
-    border:1px solid #0f3d12;
+    border:1px solid #064784;
 }
 
 .modal-tabela td{
@@ -263,12 +263,110 @@ td input{text-align:center;padding:6px;border-radius:5px}
 
 .modal-total{
     margin-top:10px;
-    background:#e8f5e9;
-    border:1px solid #b7d8b8;
+    background:var(--azul3);
+    border:1px solid #bdd7f2;
     border-radius:8px;
     padding:8px;
     font-weight:bold;
-    color:#1b5e20;
+    color:var(--azul);
+}
+
+
+
+/* HISTÓRICO - TÍTULO E OCULTAÇÃO */
+.titulo-historico{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+}
+.titulo-historico h2{margin-bottom:0}
+.btn-ocultar{
+    background:#eef6ff;
+    color:#0756a6;
+    border:1px solid #bdd7f2;
+    box-shadow:none;
+}
+.btn-ocultar:hover{
+    background:#dceeff;
+    color:#064784;
+}
+#conteudoHistorico{
+    overflow:hidden;
+    max-height:2000px;
+    opacity:1;
+    transition:max-height .35s ease, opacity .25s ease, margin .25s ease;
+}
+#conteudoHistorico.oculto{
+    max-height:0;
+    opacity:0;
+    margin:0;
+    pointer-events:none;
+}
+
+/* VISUALIZAÇÃO INSTANTÂNEA */
+#modalVisualizacao{
+    z-index:10000;
+}
+.visualizacao-box{
+    width:min(1100px,96vw);
+    height:min(92vh,1000px);
+    background:#eef3f8;
+    border-radius:16px;
+    box-shadow:0 20px 60px rgba(0,0,0,.38);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    animation:subir .18s ease-out;
+}
+.visualizacao-header{
+    min-height:58px;
+    background:linear-gradient(90deg,var(--azul),var(--azul2));
+    color:#fff;
+    padding:12px 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+.visualizacao-header strong{font-size:17px}
+.visualizacao-header span{
+    margin-left:10px;
+    opacity:.9;
+    font-size:13px;
+}
+.fechar-visualizacao{
+    width:38px;
+    height:38px;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.16);
+    color:#fff;
+    font-size:20px;
+    cursor:pointer;
+}
+.fechar-visualizacao:hover{background:rgba(255,255,255,.28)}
+.visualizacao-body{
+    flex:1;
+    overflow:auto;
+    padding:18px;
+}
+.visualizacao-body #a4{
+    margin:0 auto;
+    box-shadow:0 8px 28px rgba(0,0,0,.22);
+}
+.visualizacao-actions{
+    padding:12px 18px;
+    background:#fff;
+    border-top:1px solid #d6e0ea;
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+}
+@media(max-width:700px){
+    .visualizacao-box{width:100vw;height:100vh;border-radius:0}
+    .visualizacao-body{padding:8px}
+    .visualizacao-body #a4{transform-origin:top left;}
 }
 
 @media print{
@@ -447,8 +545,14 @@ td input{text-align:center;padding:6px;border-radius:5px}
     </div>
 
     <div class="card">
-        <h2>Histórico de Comunicados</h2>
+        <div class="titulo-historico">
+            <h2>Histórico de Comunicados</h2>
+            <button type="button" id="btnOcultarHistorico" class="btn btn-ocultar" onclick="alternarHistorico()">
+                👁️ Ocultar histórico
+            </button>
+        </div>
 
+        <div id="conteudoHistorico">
         <div class="filtros">
             <div>
                 <label>Filtrar por Ano</label>
@@ -481,9 +585,29 @@ td input{text-align:center;padding:6px;border-radius:5px}
                 <tbody></tbody>
             </table>
         </div>
+        </div>
     </div>
 </div>
 
+<!-- VISUALIZAÇÃO INSTANTÂNEA DO COMUNICADO -->
+<div id="modalVisualizacao" class="modal-overlay noprint">
+    <div class="visualizacao-box">
+        <div class="visualizacao-header">
+            <div>
+                <strong>Comunicado</strong>
+                <span id="visualizacaoControle"></span>
+            </div>
+            <button type="button" class="fechar-visualizacao" onclick="fecharVisualizacao()" title="Fechar">✕</button>
+        </div>
+        <div class="visualizacao-body">
+            <div id="documentoVisualizacao"></div>
+        </div>
+        <div class="visualizacao-actions">
+            <button type="button" class="btn btn-sec" onclick="fecharVisualizacao()">Fechar</button>
+            <button type="button" class="btn" onclick="imprimirVisualizacao()">🖨️ Imprimir comunicado</button>
+        </div>
+    </div>
+</div>
 
 <div id="modalConfirmacao" class="modal-overlay noprint">
     <div class="modal-box">
@@ -543,7 +667,11 @@ td input{text-align:center;padding:6px;border-radius:5px}
 <div id="a4">
     <div class="doc-moldura">
         <div class="doc-cabecalho">
-            <div class="brasao-fake">ESTADO<br>DO ACRE</div>
+            <div class="brasao-fake" style="border:none;border-radius:0;width:70px;height:70px;">
+                <img src="https://estado.ac.gov.br/wp-content/uploads/2022/07/cropped-brasaoacre.png"
+                     alt="Brasão de Armas do Estado do Acre"
+                     style="width:68px;height:68px;object-fit:contain;display:block;margin:auto;">
+            </div>
             <div class="doc-titulo">
                 <h3>ESTADO DO ACRE</h3>
                 <h4>INSTITUTO DE DEFESA AGROPECUÁRIA E FLORESTAL</h4>
@@ -1014,14 +1142,113 @@ function abrirComunicado(index){
 
     gerarDocumento(registro);
 
-    document.getElementById("a4").scrollIntoView({
-        behavior:"smooth"
-    });
+    const original = document.getElementById("a4");
+    const area = document.getElementById("documentoVisualizacao");
+
+    area.innerHTML = "";
+    const copia = original.cloneNode(true);
+    copia.id = "a4Visualizacao";
+    area.appendChild(copia);
+
+    document.getElementById("visualizacaoControle").innerText =
+        registro.controle ? "Nº " + registro.controle : "";
+
+    document.getElementById("modalVisualizacao").style.display = "flex";
+    document.body.style.overflow = "hidden";
+}
+
+function fecharVisualizacao(){
+    document.getElementById("modalVisualizacao").style.display = "none";
+    document.getElementById("documentoVisualizacao").innerHTML = "";
+    document.body.style.overflow = "";
+}
+
+function imprimirVisualizacao(){
+    const registroControle = document.getElementById("visualizacaoControle").innerText || "";
+    const copia = document.getElementById("a4Visualizacao");
+
+    if(!copia){
+        alert("Nenhum comunicado aberto para impressão.");
+        return;
+    }
+
+    const janela = window.open("", "_blank", "width=1000,height=800");
+
+    if(!janela){
+        alert("O navegador bloqueou a janela de impressão. Permita pop-ups para este site.");
+        return;
+    }
+
+    janela.document.write(`
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+            <meta charset="UTF-8">
+            <title>Comunicado ${registroControle}</title>
+            <style>
+                @page{size:A4;margin:8mm}
+                *{box-sizing:border-box}
+                body{margin:0;background:#fff}
+                #a4{
+                    width:210mm;
+                    min-height:297mm;
+                    margin:0 auto;
+                    padding:10mm;
+                    background:#fff;
+                    color:#111;
+                    font-family:"Times New Roman",Times,serif;
+                }
+                .doc-moldura{border:2px solid #111;padding:12px;min-height:267mm}
+                .doc-cabecalho{display:grid;grid-template-columns:80px 1fr 130px;align-items:center;border-bottom:2px solid #111;padding-bottom:8px;margin-bottom:12px}
+                .brasao-fake{width:70px!important;height:70px!important;border:none!important;display:flex;align-items:center;justify-content:center}
+                .brasao-fake img{width:68px!important;height:68px!important;object-fit:contain}
+                .doc-titulo{text-align:center;line-height:1.2}
+                .doc-titulo h3,.doc-titulo h4{margin:2px}
+                .doc-numero{border:1px solid #111;padding:8px;text-align:center;font-weight:bold;font-size:14px}
+                .doc-assunto{text-align:center;font-weight:bold;margin:12px 0;font-size:16px;text-decoration:underline}
+                .doc-texto{font-size:15px;line-height:1.55;text-align:justify}
+                .linha-campo{border-bottom:1px solid #111;font-weight:bold;padding:0 4px}
+                .tabela-doc{margin-top:10px;font-size:10.5px;width:100%;border-collapse:collapse}
+                .tabela-doc th{background:#e5e5e5!important;color:#000!important;font-weight:bold}
+                .tabela-doc td,.tabela-doc th{border:1px solid #111;padding:4px}
+                .causa-doc{border:1px solid #111;padding:7px;min-height:28px;font-size:14px}
+                .obs-doc{min-height:45px;border:1px solid #111;padding:7px;margin-top:6px;font-size:14px}
+                .data-doc{margin-top:18px;text-align:right;font-size:15px}
+                .assinaturas{display:grid;grid-template-columns:1fr 1fr;gap:35px;margin-top:70px}
+                .assinatura{text-align:center;font-size:14px}
+                .linha-ass{border-top:1px solid #111;padding-top:5px}
+                .nome-servidor-ass{font-weight:bold;margin-top:4px;text-transform:uppercase}
+                .rodape-doc{margin-top:35px;border-top:1px solid #111;padding-top:6px;text-align:center;font-size:11px}
+            </style>
+        </head>
+        <body>${copia.outerHTML}</body>
+        </html>
+    `);
+
+    janela.document.close();
+    janela.focus();
+
+    setTimeout(() => {
+        janela.print();
+        janela.close();
+    }, 600);
 }
 
 function reimprimirComunicado(index){
     abrirComunicado(index);
-    setTimeout(() => window.print(), 300);
+}
+
+function alternarHistorico(){
+    const conteudo = document.getElementById("conteudoHistorico");
+    const botao = document.getElementById("btnOcultarHistorico");
+
+    if(!conteudo || !botao) return;
+
+    const oculto = conteudo.classList.toggle("oculto");
+
+    botao.innerHTML = oculto
+        ? "👁️ Mostrar histórico"
+        : "🙈 Ocultar histórico";
 }
 
 async function carregarHistorico(){
@@ -1148,12 +1375,19 @@ async function iniciar(){
 document.addEventListener("keydown", function(event){
     if(event.key === "Escape"){
         fecharConfirmacao();
+        fecharVisualizacao();
     }
 });
 
 document.getElementById("modalConfirmacao").addEventListener("click", function(event){
     if(event.target === this){
         fecharConfirmacao();
+    }
+});
+
+document.getElementById("modalVisualizacao").addEventListener("click", function(event){
+    if(event.target === this){
+        fecharVisualizacao();
     }
 });
 
