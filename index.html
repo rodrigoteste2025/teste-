@@ -375,6 +375,78 @@ td input{text-align:center;padding:6px;border-radius:5px}
     #a4{margin:0;width:210mm;min-height:297mm;padding:10mm;box-shadow:none}
     @page{size:A4;margin:8mm}
 }
+
+/* =========================================================
+   IDAF MODERNO — CAMADA VISUAL E CARREGAMENTOS
+   ========================================================= */
+:root{
+  --idaf-blue:#0756a6;
+  --idaf-blue2:#0b78d0;
+  --idaf-blue3:#eaf4ff;
+  --idaf-dark:#12304d;
+  --idaf-border:#d8e4ef;
+  --idaf-bg:#f4f8fc;
+  --idaf-green:#16a36a;
+}
+html{scroll-behavior:smooth}
+body{background:linear-gradient(145deg,#edf5fc 0%,#f8fbff 55%,#eef5fb 100%);font-family:Inter,Segoe UI,Arial,sans-serif;color:#1d2b39}
+.topo-sistema{position:relative;background:linear-gradient(135deg,#06498e,#0876cf 72%,#1392df);padding:28px 20px 24px;box-shadow:0 8px 28px rgba(7,86,166,.18);overflow:hidden}
+.topo-sistema:after{content:"";position:absolute;width:280px;height:280px;right:-100px;top:-170px;border-radius:50%;background:rgba(255,255,255,.10)}
+.topo-sistema h1{position:relative;z-index:1;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-.5px;text-shadow:0 1px 2px rgba(0,0,0,.15)}
+.topo-sistema p{position:relative;z-index:1;margin:7px 0 12px;font-size:13px;letter-spacing:.7px}
+.idaf-status-top{position:relative;z-index:2;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.24);padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#ffd166;box-shadow:0 0 0 4px rgba(255,209,102,.15)}
+.container{max-width:1480px;padding:26px 20px 50px}
+.card{border:1px solid var(--idaf-border);border-radius:18px;background:rgba(255,255,255,.98);box-shadow:0 10px 30px rgba(30,70,110,.08);padding:24px;margin-bottom:20px;transition:box-shadow .2s ease,border-color .2s ease}
+.card:hover{box-shadow:0 14px 36px rgba(30,70,110,.11);border-color:#c9dced}
+.card h2{font-size:19px;font-weight:800;border-left:5px solid var(--idaf-blue2);padding-left:12px;color:var(--idaf-dark);margin-bottom:20px}
+.grid{gap:16px}
+label{display:block;color:#38516a;font-size:12px;letter-spacing:.35px;margin-bottom:5px}
+input,select,textarea{border:1px solid #cbd9e6;border-radius:11px;background:#fbfdff;color:#172b3d;min-height:42px;padding:11px 12px;transition:border-color .18s,box-shadow .18s,background .18s;box-shadow:0 1px 2px rgba(20,50,80,.03)}
+input:hover,select:hover,textarea:hover{border-color:#a9c5dc;background:#fff}
+input:focus,select:focus,textarea:focus{border-color:#1787d8;box-shadow:0 0 0 4px rgba(23,135,216,.12);background:#fff}
+input[readonly]{background:#edf6ff;color:#0756a6;font-weight:800;border-color:#bcd8ef}
+.tabela-wrap{overflow:auto;max-height:470px;border:1px solid #d7e3ed;border-radius:14px;background:#fff;box-shadow:inset 0 1px 0 rgba(0,0,0,.02)}
+.tabela-wrap::-webkit-scrollbar{width:9px;height:9px}.tabela-wrap::-webkit-scrollbar-track{background:#eef4f8;border-radius:10px}.tabela-wrap::-webkit-scrollbar-thumb{background:#9db6ca;border-radius:10px}.tabela-wrap::-webkit-scrollbar-thumb:hover{background:#7195b0}
+.tabela-wrap table{min-width:900px}
+table{border-collapse:separate;border-spacing:0}
+th{position:sticky;top:0;z-index:3;background:linear-gradient(135deg,#0756a6,#0b78d0);font-weight:800;letter-spacing:.2px}
+td,th{border:0;border-bottom:1px solid #dfe8ef;padding:8px}
+tbody tr:nth-child(even){background:#f8fbfe}tbody tr:hover{background:#eef7ff}
+.tabela-wrap td input{min-height:34px}
+.btn{border-radius:11px;padding:11px 17px;box-shadow:0 5px 14px rgba(7,86,166,.14);font-size:13px;transition:transform .16s,box-shadow .16s,background .16s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(7,86,166,.20)}
+.btn:active{transform:translateY(0)}
+.btn-sec{background:#516779}.btn-sec:hover{background:#3c5263}
+.barra-acoes{gap:9px}
+.filtros{background:#f6faff;border:1px solid #dce8f2;border-radius:14px;padding:14px;grid-template-columns:minmax(180px,220px) 1fr}
+.badge{background:#e9f4ff;border:1px solid #c6e0f7;color:#0756a6;padding:5px 10px}
+#historico{min-width:920px}
+#historico th{white-space:nowrap}
+#historico td:last-child{white-space:nowrap}
+#historico td .btn{padding:7px 10px;font-size:11px;margin:2px}
+.titulo-historico{margin-bottom:16px}
+.btn-ocultar{background:#edf6ff;color:#0756a6;border:1px solid #c8def0}
+.alerta{border-radius:13px;border-color:#f3c85b;background:#fff9e8}
+/* modal de boas-vindas */
+.welcome-overlay{background:rgba(7,32,55,.64)}
+.welcome-box{width:min(560px,94vw);background:#fff;border-radius:22px;padding:30px;box-shadow:0 28px 70px rgba(0,0,0,.28);text-align:center;animation:welcomeIn .28s ease-out}
+@keyframes welcomeIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+.welcome-icon{width:58px;height:58px;margin:0 auto 13px;border-radius:18px;background:linear-gradient(135deg,#0756a6,#0b78d0);color:#fff;font-size:32px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(7,86,166,.22)}
+.welcome-kicker{font-size:11px;font-weight:900;letter-spacing:1.3px;color:#6d8194}.welcome-box h2{margin:7px 0 4px;color:#12304d;font-size:26px}.welcome-main{margin:0 0 18px;color:#4d6478;font-weight:700}
+.welcome-alert{display:flex;flex-direction:column;gap:5px;text-align:left;padding:14px;border:1px solid #f0ce69;background:#fff9e8;border-radius:14px;color:#624d0a}.welcome-alert strong{font-size:14px}.welcome-alert span{font-size:12px;line-height:1.45}
+.welcome-points{display:grid;gap:9px;text-align:left;margin:17px 0}.welcome-points div{display:flex;align-items:center;gap:10px;color:#40586c;font-size:13px}.welcome-points b{width:25px;height:25px;display:grid;place-items:center;border-radius:50%;background:#e9f4ff;color:#0756a6}
+.welcome-btn{width:100%;margin:3px 0 0}
+/* carregamento */
+.idaf-loading-overlay{position:fixed;inset:0;z-index:20000;background:rgba(243,248,252,.96);display:none;align-items:center;justify-content:center;padding:20px}
+.idaf-loading-overlay.show{display:flex}
+.idaf-loading-box{width:min(390px,92vw);background:#fff;border:1px solid #d9e5ef;border-radius:20px;padding:28px;text-align:center;box-shadow:0 22px 60px rgba(25,65,100,.18)}
+.idaf-spinner{width:46px;height:46px;border:4px solid #dcebf7;border-top-color:#0b78d0;border-radius:50%;margin:0 auto 16px;animation:idafSpin .8s linear infinite}
+@keyframes idafSpin{to{transform:rotate(360deg)}}
+#idafLoadingTitle{font-weight:900;color:#12304d;font-size:17px}.idaf-loading-box small{display:block;color:#667d91;margin-top:6px;line-height:1.4}.idaf-progress{height:4px;background:#e8f0f6;border-radius:9px;overflow:hidden;margin-top:18px}.idaf-progress span{display:block;width:35%;height:100%;background:#0b78d0;border-radius:9px;animation:idafProgress 1.15s ease-in-out infinite}
+@keyframes idafProgress{0%{transform:translateX(-120%)}100%{transform:translateX(350%)}}
+@media(max-width:700px){.container{padding:16px 10px 35px}.card{padding:17px;border-radius:15px}.grid{grid-template-columns:1fr}.filtros{grid-template-columns:1fr}.barra-acoes{display:grid;grid-template-columns:1fr}.barra-acoes .btn{width:100%;margin:0}.welcome-box{padding:23px}.topo-sistema{padding:22px 14px}}
+@media print{.idaf-loading-overlay,.welcome-overlay,.idaf-status-top{display:none!important}}
 </style>
 </head>
 
@@ -382,7 +454,38 @@ td input{text-align:center;padding:6px;border-radius:5px}
 
 <div class="topo-sistema noprint">
     <h1>Comunicado de Atualização de Rebanho Bovídeo</h1>
-    <p> ORIENTAÇÕES PROCURAR A CHEFE DA UNIDADE</p>
+    <p>ORIENTAÇÕES • PROCURE A CHEFE DA UNIDADE</p>
+        <div class="idaf-status-top"><span class="status-dot"></span><span id="statusConexaoTop">Conectando ao banco de dados...</span></div>
+</div>
+
+<!-- TELA DE BOAS-VINDAS -->
+<div id="modalBoasVindas" class="modal-overlay noprint welcome-overlay">
+    <div class="welcome-box">
+        <div class="welcome-icon">✓</div>
+        <div class="welcome-kicker">IDAF • SISTEMA INTERNO</div>
+        <h2>Bem-vindo ao sistema</h2>
+        <p class="welcome-main">Comunicado de Atualização de Rebanho Bovídeo</p>
+        <div class="welcome-alert">
+            <strong>⚠️ Atenção com as informações inseridas</strong>
+            <span>Confira cuidadosamente CPF, produtor, propriedade, município, tipo de alteração e quantidade de animais antes de confirmar.</span>
+        </div>
+        <div class="welcome-points">
+            <div><b>1</b><span>Preencha os dados corretamente.</span></div>
+            <div><b>2</b><span>Revise o resumo antes de salvar.</span></div>
+            <div><b>3</b><span>Após confirmar, o controle será registrado no banco de dados.</span></div>
+        </div>
+        <button type="button" class="btn welcome-btn" onclick="fecharBoasVindas()">Entendi, continuar</button>
+    </div>
+</div>
+
+<!-- CARREGAMENTO -->
+<div id="idafLoadingOverlay" class="idaf-loading-overlay noprint" aria-hidden="true">
+    <div class="idaf-loading-box">
+        <div class="idaf-spinner"></div>
+        <div id="idafLoadingTitle">Carregando sistema...</div>
+        <small id="idafLoadingText">Consultando as informações do banco de dados.</small>
+        <div class="idaf-progress"><span></span></div>
+    </div>
 </div>
 
 <div class="container noprint">
@@ -556,14 +659,14 @@ td input{text-align:center;padding:6px;border-radius:5px}
         <div class="filtros">
             <div>
                 <label>Filtrar por Ano</label>
-                <select id="filtroAno" onchange="carregarHistorico()">
+                <select id="filtroAno" onchange="renderizarHistorico()">
                     <option value="">TODOS</option>
                 </select>
             </div>
 
             <div>
                 <label>Pesquisar por produtor, CPF ou controle</label>
-                <input id="pesquisa" placeholder="PESQUISAR..." oninput="carregarHistorico()">
+                <input id="pesquisa" placeholder="PESQUISAR..." oninput="renderizarHistorico()">
             </div>
         </div>
 
@@ -1391,8 +1494,108 @@ document.getElementById("modalVisualizacao").addEventListener("click", function(
     }
 });
 
-iniciar();
+/* iniciar será chamado pelo controlador moderno */
 </script>
 
+
+<script>
+/* =========================================================
+   CONTROLADOR MODERNO IDAF — carregamento, boas-vindas e status
+   ========================================================= */
+(function(){
+  const overlay=document.getElementById('idafLoadingOverlay');
+  const title=document.getElementById('idafLoadingTitle');
+  const text=document.getElementById('idafLoadingText');
+  window.IDAFLoading={
+    show:function(t,m){if(title)title.textContent=t||'Carregando...';if(text)text.textContent=m||'Aguarde...';if(overlay){overlay.classList.add('show');overlay.setAttribute('aria-hidden','false');}},
+    hide:function(){if(overlay){overlay.classList.remove('show');overlay.setAttribute('aria-hidden','true');}}
+  };
+  window.fecharBoasVindas=function(){
+    const el=document.getElementById('modalBoasVindas');
+    if(el) el.style.display='none';
+    try{localStorage.setItem('idaf_boas_vindas','1')}catch(e){}
+  };
+  window.abrirBoasVindas=function(){const el=document.getElementById('modalBoasVindas');if(el)el.style.display='flex';};
+  document.addEventListener('click',function(e){
+    const b=e.target.closest('button'); if(!b||b.disabled)return;
+    const s=(b.textContent||'').toLowerCase();
+    if(s.includes('novo comunicado')) IDAFLoading.show('Preparando novo comunicado...','Limpando o formulário e consultando o próximo controle.');
+    else if(s.includes('confirmar e imprimir')||s.includes('imprimir comunicado')||s.includes('salvar no supabase')) IDAFLoading.show('Processando comunicado...','Salvando as informações no banco de dados.');
+    else if(s.includes('atualizar histórico')) IDAFLoading.show('Atualizando histórico...','Consultando os comunicados registrados.');
+  },true);
+  window.addEventListener('afterprint',function(){IDAFLoading.hide()});
+})();
+
+/* Evita consulta ao Supabase a cada tecla: a pesquisa do histórico é local. */
+const _carregarHistoricoOriginal = carregarHistorico;
+let _historicoPrimeiraCarga = true;
+carregarHistorico = async function(){
+  if(!supabaseConfigurado()){
+    const tb=document.querySelector('#historico tbody');
+    if(tb)tb.innerHTML='<tr><td colspan="7">Supabase não configurado.</td></tr>';
+    return;
+  }
+  IDAFLoading.show('Carregando informações...','Consultando os comunicados salvos no banco de dados.');
+  try{
+    const {data,error}=await supabaseClient.from(TABELA).select('id,controle,ano,data_emissao,nome,cpf,propriedade,localizacao,municipio,servidor,tipo,causa_morte,observacoes,bovinos,bubalinos').order('id',{ascending:false});
+    if(error) throw error;
+    comunicadosCache=data||[];
+    carregarAnos();
+    renderizarHistorico();
+    const st=document.getElementById('statusConexaoTop');
+    if(st)st.textContent=`Banco conectado • ${comunicadosCache.length} comunicado(s)`;
+    const dot=document.querySelector('.status-dot');if(dot)dot.style.background='#63e6a3';
+  }catch(error){
+    console.error(error);
+    const st=document.getElementById('statusConexaoTop');if(st)st.textContent='Falha ao consultar o banco de dados';
+    const dot=document.querySelector('.status-dot');if(dot)dot.style.background='#ff6b6b';
+    const tb=document.querySelector('#historico tbody');if(tb)tb.innerHTML='<tr><td colspan="7">Não foi possível carregar o histórico. Verifique a conexão e as políticas do Supabase.</td></tr>';
+    alert('Erro ao carregar histórico do Supabase: '+error.message);
+  }finally{IDAFLoading.hide();}
+};
+
+/* Salvar com tratamento visual real e sem alterar a estrutura da tabela. */
+const _salvarEImprimirOriginal = salvarEImprimir;
+salvarEImprimir = async function(){
+  IDAFLoading.show('Salvando comunicado...','Gerando o controle e registrando os dados no Supabase.');
+  try{return await _salvarEImprimirOriginal();}
+  finally{setTimeout(()=>IDAFLoading.hide(),400);}
+};
+
+/* Novo comunicado: usa o mesmo banco para obter o próximo controle. */
+const _limparFormularioOriginal = limparFormulario;
+limparFormulario = async function(){
+  IDAFLoading.show('Novo comunicado...','Preparando um novo formulário.');
+  try{return await _limparFormularioOriginal();}
+  finally{setTimeout(()=>IDAFLoading.hide(),350);}
+};
+
+/* Ao abrir um item do histórico, não há nova consulta: usa o cache carregado. */
+const _abrirComunicadoOriginal = abrirComunicado;
+abrirComunicado = function(index){
+  IDAFLoading.show('Abrindo comunicado...','Montando a visualização do documento.');
+  try{return _abrirComunicadoOriginal(index);}
+  finally{setTimeout(()=>IDAFLoading.hide(),180);}
+};
+
+/* Inicialização com tela de carregamento real. */
+const _iniciarOriginal = iniciar;
+iniciar = async function(){
+  IDAFLoading.show('Iniciando sistema...','Carregando configurações e informações do banco de dados.');
+  try{await _iniciarOriginal();}
+  finally{
+    IDAFLoading.hide();
+    setTimeout(()=>{
+      const modal=document.getElementById('modalBoasVindas');
+      let visto=false;try{visto=localStorage.getItem('idaf_boas_vindas')==='1'}catch(e){}
+      if(modal && !visto) modal.style.display='flex';
+    },220);
+  }
+};
+
+/* Como o script original chama iniciar() acima, substituímos a chamada final do original por uma nova chamada. */
+</script>
+
+<script>iniciar();</script>
 </body>
 </html>
